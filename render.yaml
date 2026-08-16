@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: lanzzai-ultra
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: AI_API_KEY
+        sync: false
+      - key: AI_MODEL
+        value: gpt-4o-mini
+      - key: AI_UPSTREAM
+        value: https://api.openai.com/v1/chat/completions
