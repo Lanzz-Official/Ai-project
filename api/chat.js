@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export default async function handler(req, res) {
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
     if (!message) {
       return res.status(400).json({
-        error: "Pesan kosong"
+        error: "Pesan kosong",
       });
     }
 
@@ -19,13 +19,16 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "user",
-          content: message
-        }
-      ]
+          content: message,
+        },
+      ],
     });
 
+    const jawaban = result.choices[0].message.content;
+
     res.status(200).json({
-      reply: result.choices[0].message.content
+      balasan: jawaban,
+      reply: jawaban,
     });
 
   } catch (error) {
@@ -33,7 +36,7 @@ export default async function handler(req, res) {
 
     res.status(500).json({
       error: "Gagal terhubung ke AI",
-      detail: error.message
+      detail: error.message,
     });
   }
 }
