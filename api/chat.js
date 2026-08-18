@@ -42,7 +42,7 @@ export default async function handler(req, res) {
 
         body: JSON.stringify({
 
-          model: "qwen/qwen3-8b:free",
+          model: "mistralai/mistral-7b-instruct:free",
 
           messages: [
             {
