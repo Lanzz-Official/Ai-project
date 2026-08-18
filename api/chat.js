@@ -2,42 +2,32 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
   apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1",
+  baseURL: "https://api.groq.com/openai/v1"
 });
 
-export default async function handler(req, res) {
+export default async function handler(req,res){
   try {
-    const { message } = req.body;
-
-    if (!message) {
-      return res.status(400).json({
-        error: "Pesan kosong",
-      });
-    }
+    const {message} = req.body;
 
     const result = await client.chat.completions.create({
       model: "llama-3.1-8b-instant",
-      messages: [
+      messages:[
         {
-          role: "user",
-          content: message,
-        },
-      ],
+          role:"user",
+          content:message
+        }
+      ]
     });
-
-    const jawaban = result.choices[0].message.content;
 
     res.status(200).json({
-      reply: jawaban,
-      balasan: jawaban,
+      reply: result.choices[0].message.content
     });
 
-  } catch (error) {
-    console.error(error);
-
+  } catch(error){
+    console.log(error);
     res.status(500).json({
-      error: "Gagal terhubung ke AI",
-      detail: error.message,
+      error:"Gagal terhubung AI",
+      detail:error.message
     });
   }
 }
