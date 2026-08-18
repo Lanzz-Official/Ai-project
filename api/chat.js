@@ -15,7 +15,18 @@ export default async function handler(req, res) {
 
   try {
 
-    const { message } = req.body;
+    if (!process.env.GROQ_API_KEY) {
+      return res.status(500).json({
+        error: "GROQ_API_KEY belum terpasang"
+      });
+    }
+
+    const body = req.body;
+
+    const message =
+      typeof body === "string"
+        ? body
+        : body.message || body.prompt;
 
     if (!message) {
       return res.status(400).json({
@@ -23,18 +34,24 @@ export default async function handler(req, res) {
       });
     }
 
+
     const result = await client.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+
+      // MODEL GROQ TERBARU
+      model: "llama-3.3-70b-versatile",
+
       messages: [
         {
           role: "system",
-          content: "Kamu adalah LanzzAI, asisten AI yang membantu."
+          content:
+          "Kamu adalah LanzzAI, asisten AI yang pintar dan ramah."
         },
         {
           role: "user",
           content: message
         }
       ]
+
     });
 
 
@@ -48,9 +65,10 @@ export default async function handler(req, res) {
     console.log(error);
 
     return res.status(500).json({
-      error: "Gagal AI",
-      detail: error.message
+      error:"Gagal menghubungkan AI",
+      detail:error.message
     });
 
   }
+
 }
