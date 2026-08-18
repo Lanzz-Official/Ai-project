@@ -1,74 +1,49 @@
-import OpenAI from "openai";
-
-const client = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1",
-});
-
 export default async function handler(req, res) {
-
   if (req.method !== "POST") {
     return res.status(405).json({
-      error: "Method tidak diizinkan"
+      error: "Method not allowed"
     });
   }
 
   try {
-
-    if (!process.env.GROQ_API_KEY) {
-      return res.status(500).json({
-        error: "GROQ_API_KEY belum terpasang"
-      });
-    }
-
-    const body = req.body;
-
-    const message =
-      typeof body === "string"
-        ? body
-        : body.message || body.prompt;
+    const { message } = req.body;
 
     if (!message) {
       return res.status(400).json({
-        error: "Pesan kosong"
+        error: "No message"
       });
     }
 
-
-    const result = await client.chat.completions.create({
-
-      // MODEL GROQ TERBARU
-      model: "llama-3.3-70b-versatile",
-
-      messages: [
-        {
-          role: "system",
-          content:
-          "Kamu adalah LanzzAI, asisten AI yang pintar dan ramah."
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json"
         },
-        {
-          role: "user",
-          content: message
-        }
-      ]
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          messages: [
+            {
+              role:"user",
+              content:message
+            }
+          ]
+        })
+      }
+    );
 
+    const data = await response.json();
+
+    res.status(200).json({
+      reply:data.choices[0].message.content
     });
 
-
-    return res.status(200).json({
-      reply: result.choices[0].message.content
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({
+      error:err.message
     });
-
-
-  } catch(error){
-
-    console.log(error);
-
-    return res.status(500).json({
-      error:"Gagal menghubungkan AI",
-      detail:error.message
-    });
-
   }
-
 }
