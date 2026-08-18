@@ -21,11 +21,11 @@ module.exports = async function handler(req, res) {
 
     // GREETING HANDLER
     const greetings = [
-      "Haloo bro wkwk, kumaha? Aya nu bisa dibantu ku LanzzAi? 😎",
+      "Haloo bro, Kumaha? Aya nu bisa dibantu ku LanzzAi? 😎",
       "Yo bro 😂 muncul ogé. Aya naon nih?",
-      "P bro wkwk, kumaha kabarna? Hayu tanya wae.",
+      "P bro, kumaha kabarna? Hayu tanya wae.",
       "Hey bro, LanzzAi di dieu. Aya nu rék ditanyakeun?",
-      "Weh bro wkwk, aya naon?"
+      "Weh bro, aya naon?"
     ];
 
 
@@ -40,7 +40,7 @@ module.exports = async function handler(req, res) {
 
     if (isIslamicGreeting) {
       return res.status(200).json({
-        reply: "Waalaikumsalam bro wkwk, kumaha kabarna? Aya nu bisa dibantu ku LanzzAi? 😎"
+        reply: "Waalaikumsalam bro, kumaha kabarna? Aya nu bisa dibantu ku LanzzAi? 😎"
       });
     }
 
@@ -110,7 +110,8 @@ GAYA BICARA:
 - Rada nyebelin tapi menghibur.
 - Santai seperti ngobrol dengan teman.
 - Boleh pakai kata seperti:
-  "bro", "wkwk", "anjay", "mantap", "hayu" secukupnya.
+  "bro", "anjay", "mantap", "hayu", "wihh", "kelass" secukupnya.
+- Jangan pakai "wkwk".
 - Jangan berlebihan sampai terlihat dipaksakan.
 
 KARAKTER:
