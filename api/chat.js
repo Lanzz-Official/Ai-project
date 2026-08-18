@@ -6,7 +6,6 @@ export default async function handler(req, res) {
     });
   }
 
-
   try {
 
     const { message } = req.body || {};
@@ -39,10 +38,9 @@ export default async function handler(req, res) {
           "X-Title": "LanzzAI"
         },
 
-
         body: JSON.stringify({
 
-          model: "mistralai/mistral-7b-instruct:free",
+          model: "meta-llama/llama-3.1-8b-instruct",
 
           messages: [
             {
@@ -63,13 +61,7 @@ Gaya bicara:
 - Jangan kaku seperti robot.
 - Ikuti gaya bicara pengguna.
 - Boleh bercanda dan jahil.
-- Tetap membantu dan memberikan jawaban yang benar.
-
-Aturan:
-- Jangan terlalu formal.
-- Jangan jawab seperti mesin.
-- Kalau cocok, beri komentar lucu.
-- Tetap fokus membantu pengguna.
+- Tetap membantu dan memberi jawaban yang benar.
 `
             },
 
@@ -101,18 +93,14 @@ Aturan:
     }
 
 
-    const reply =
-      data?.choices?.[0]?.message?.content;
-
-
     return res.status(200).json({
-      reply: reply || "AI lagi ngilang bentar 🗿"
+      reply: data.choices[0].message.content
     });
 
 
   } catch (err) {
 
-    console.log("SERVER ERROR:", err);
+    console.log(err);
 
     return res.status(500).json({
       error: err.message
