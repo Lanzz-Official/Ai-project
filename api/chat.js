@@ -16,13 +16,52 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    const input = message.toLowerCase().trim();
+
+
+    // GREETING HANDLER
+    const greetings = [
+      "Haloo bro wkwk, kumaha? Aya nu bisa dibantu ku LanzzAi? 😎",
+      "Yo bro 😂 muncul ogé. Aya naon nih?",
+      "P bro wkwk, kumaha kabarna? Hayu tanya wae.",
+      "Hey bro, LanzzAi di dieu. Aya nu rék ditanyakeun?",
+      "Weh bro wkwk, aya naon?"
+    ];
+
+
+    const isGreeting =
+      /^(p+|ping+|halo+|hai+|hay+|hey+|hi+|hello+|helo+|allo+|allow+|alow+|yo+|tes+|test+|cek+|coba+|oy+|woy+|woi+|bro|bang|gan|bos|cuy|permisi|punten|misi|weh+|euy+|eh+|wkwk+)$/i
+      .test(input);
+
+
+    const isIslamicGreeting =
+      /^assalamualaikum( wr wb)?$/i.test(input);
+
+
+    if (isIslamicGreeting) {
+      return res.status(200).json({
+        reply: "Waalaikumsalam bro wkwk, kumaha kabarna? Aya nu bisa dibantu ku LanzzAi? 😎"
+      });
+    }
+
+
+    if (isGreeting) {
+      return res.status(200).json({
+        reply: greetings[Math.floor(Math.random() * greetings.length)]
+      });
+    }
+
+
+
     const apiKey = process.env.OPENROUTER_API_KEY;
+
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "OPENROUTER_API_KEY tidak ditemukan"
+        error: "API key teu aya"
       });
     }
+
 
 
     const response = await fetch(
@@ -37,38 +76,49 @@ module.exports = async function handler(req, res) {
           "X-Title": "LanzzAI"
         },
 
+
         body: JSON.stringify({
 
           model: "meta-llama/llama-3.1-8b-instruct",
 
           messages: [
+
             {
               role: "system",
               content: `
 Anjeun téh LanzzAi.
 
-ATURAN BAHASA:
-- Salawasna jawab nganggo basa Sunda.
-- Ulah maké Sunda lemes anu kaku.
-- Paké basa Sunda sapopoé (loma), siga ngobrol jeung babaturan.
-- Boleh campur saeutik jeung kecap gaul Indonesia lamun leuwih natural.
-- Ulah maké "abdi", "anjeun", "hatur nuhun" teuing sering.
-- Lamun bingung antara Sunda lemes jeung loma, pilih Sunda loma.
+ATURAN PALING PENTING:
+- Salawasna jawab nganggo basa Sunda loma sapopoé.
+- Ulah nganggo basa Sunda lemes anu kaku.
+- Ulah nganggo basa Jawa.
+- Sanajan user ngagunakeun bahasa Indonesia, Inggris, atawa bahasa séjén, tetep jawab Sunda.
+- Ulah robah kana basa user.
 
 GAYA:
+- Saperti ngobrol jeung babaturan.
 - Humoris.
 - Friendly.
-- Rada absurd.
+- Absurd.
 - Sarkastik tapi lucu.
-- Rada nyebelin saeutik tapi tetep ngabantu.
-- Gaya ngobrol santai anak muda.
+- Rada nyebelin saeutik tapi teu ngahina.
+- Santai, henteu formal.
+
+PAKE:
+- bro
+- wkwk
+- hayu
+- kumaha
+- aya
+- teu
+
+HINDARI:
+- abdi
+- anjeun
+- simkuring
+- basa resmi teuing
 
 CONTOH:
-User: "Halo"
-
-Jawaban:
-"Haloo bro wkwk, kumaha? Aya nu bisa dibantu? Hayu tanya wae."
-
 User: "Siapa kamu?"
 
 Jawaban:
@@ -77,19 +127,18 @@ Jawaban:
 User: "Apa kabar?"
 
 Jawaban:
-"Aman bro wkwk, maneh kumaha? Aya masalah naon nih?"
+"Aman bro wkwk, maneh kumaha? Aya naon nih?"
 
-ATURAN PENTING:
-- Ulah ngajawab nganggo Bahasa Indonesia salaku basa utama.
-- Ulah jadi formal.
-- Anggap ngobrol jeung babaturan.
-- Sadaya jawaban kudu tetep basa Sunda sapopoé.
+INGET:
+Jawaban kudu Sunda loma, lain Sunda lemes jeung lain Jawa.
 `
             },
+
             {
               role: "user",
               content: message
             }
+
           ],
 
           temperature: 0.8,
@@ -119,12 +168,12 @@ ATURAN PENTING:
     });
 
 
-  } catch (err) {
+  } catch (error) {
 
-    console.log(err);
+    console.log(error);
 
     return res.status(500).json({
-      error: err.message
+      error: error.message
     });
 
   }
