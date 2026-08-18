@@ -1,7 +1,8 @@
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
 });
 
 export default async function handler(req, res) {
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
     }
 
     const result = await client.chat.completions.create({
-      model: "gpt-5-mini",
+      model: "llama-3.1-8b-instant",
       messages: [
         {
           role: "user",
@@ -27,8 +28,8 @@ export default async function handler(req, res) {
     const jawaban = result.choices[0].message.content;
 
     res.status(200).json({
-      balasan: jawaban,
       reply: jawaban,
+      balasan: jawaban,
     });
 
   } catch (error) {
