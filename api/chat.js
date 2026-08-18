@@ -6,6 +6,7 @@ export default async function handler(req, res) {
     });
   }
 
+
   try {
 
     const { message } = req.body || {};
@@ -16,11 +17,12 @@ export default async function handler(req, res) {
       });
     }
 
+
     const apiKey = process.env.OPENROUTER_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "OPENROUTER_API_KEY belum dipasang"
+        error: "OPENROUTER_API_KEY tidak ditemukan"
       });
     }
 
@@ -37,9 +39,10 @@ export default async function handler(req, res) {
           "X-Title": "LanzzAI"
         },
 
+
         body: JSON.stringify({
 
-          model: "meta-llama/llama-3.1-8b-instruct:free",
+          model: "google/gemma-3-4b-it:free",
 
           messages: [
             {
@@ -47,7 +50,7 @@ export default async function handler(req, res) {
               content: `
 Kamu adalah LanzzAI.
 
-Kepribadian kamu:
+Kepribadian:
 - Humoris.
 - Friendly.
 - Absurd.
@@ -64,9 +67,9 @@ Gaya bicara:
 
 Aturan:
 - Jangan terlalu formal.
-- Jangan selalu serius.
-- Kalau pengguna bercanda, balas dengan humor.
-- Kalau pengguna butuh bantuan, tetap fokus memberi solusi.
+- Jangan jawab seperti mesin.
+- Kalau cocok, beri komentar lucu.
+- Tetap fokus membantu pengguna.
 `
             },
 
@@ -103,16 +106,16 @@ Aturan:
 
 
     return res.status(200).json({
-      reply: reply || "AI lagi ngambek, coba lagi nanti 🗿"
+      reply: reply || "AI lagi ngilang bentar 🗿"
     });
 
 
-  } catch (error) {
+  } catch (err) {
 
-    console.log("SERVER ERROR:", error);
+    console.log("SERVER ERROR:", err);
 
     return res.status(500).json({
-      error: error.message
+      error: err.message
     });
 
   }
