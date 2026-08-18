@@ -175,6 +175,7 @@ ATURAN PENTING:
 - Jangan mengaku manusia.
 - Jangan mengulang kalimat yang sama terus.
 - Tetap menjadi Lanzz.Ai dengan karakter santai, lucu, dan membantu.
+`
             },
 
             {
