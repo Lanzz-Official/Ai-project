@@ -123,6 +123,53 @@ textarea{display:block;width:100%;min-height:46px;max-height:150px;resize:none;b
  textarea{min-height:42px;font-size:13px}.tool{width:34px;height:34px}
 }
 @media(max-width:390px){.hero h1{font-size:42px}.feature-grid{grid-template-columns:1fr}.feature{min-height:auto}.dev-card{font-size:10px}}
+\n/* --- viewport / responsive stability fixes --- */
+html, body { width:100%; min-width:0; height:100%; min-height:100%; overflow:hidden; }
+.app, .sidebar, .main { height:100vh; height:100dvh; }
+.main { min-height:0; }
+.content { min-height:0; overflow-x:hidden; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; scrollbar-gutter:stable; padding-bottom:24px; }
+.composer { flex:0 0 auto; position:relative; }
+.hero { width:100%; }
+
+@media (min-width:761px) and (max-height:760px) {
+  .content { padding-top:14px; }
+  .hero { margin-top:8px; }
+  .hero-badge { width:64px; height:64px; border-radius:20px; margin-bottom:12px; }
+  .hero-badge svg { width:32px; height:32px; }
+  .hero h1 { font-size:clamp(40px,5.5vw,62px); letter-spacing:-3.5px; margin-bottom:10px; }
+  .hero-lead { font-size:12px; line-height:1.55; max-width:680px; }
+  .dev-card { margin:14px auto; padding:12px; }
+  .feature-grid { margin-top:10px; gap:8px; }
+  .feature { min-height:105px; padding:12px; }
+  .extra { margin-top:12px; }
+}
+
+@media (max-width:760px) {
+  .app { display:block; height:100vh; height:100dvh; }
+  .main { width:100%; height:100vh; height:100dvh; }
+  .content { padding:14px 10px 18px; scrollbar-gutter:auto; }
+  .hero { margin-top:8px; }
+  .hero-badge { width:64px; height:64px; margin-bottom:12px; }
+  .hero h1 { font-size:clamp(40px,13vw,52px); letter-spacing:-2.8px; line-height:.98; }
+  .hero-lead { max-width:680px; padding:0 4px; font-size:12px; line-height:1.65; }
+  .dev-card { margin:14px auto; width:100%; }
+  .feature-grid { width:100%; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .feature { min-width:0; }
+}
+
+@media (max-width:390px) {
+  .content { padding-left:8px; padding-right:8px; }
+  .hero h1 { font-size:40px; letter-spacing:-2.2px; }
+  .hero-lead { font-size:11px; }
+  .feature-grid { grid-template-columns:1fr; }
+}
+
+/* Keep the mobile controls clickable on older Android WebViews. */
+.mobile-menu, .top-btn.home-btn { position:relative !important; z-index:999 !important; pointer-events:auto !important; touch-action:manipulation !important; cursor:pointer !important; }
+.mobile-menu { display:grid !important; place-items:center !important; width:38px !important; height:38px !important; padding:0 !important; opacity:1 !important; visibility:visible !important; }
+.mobile-menu svg { width:20px !important; height:20px !important; }
+.top-btn.home-btn { display:grid !important; place-items:center !important; padding:0 !important; }
+.top-btn.home-btn svg { width:19px !important; height:19px !important; }
 </style>
 </head>
 <body>
@@ -465,29 +512,5 @@ window.addEventListener('resize',()=>{
 </script>
 </body>
 </html>
-<style>
-.mobile-menu,
-.top-btn.home-btn {
-  position: relative !important;
-  z-index: 999 !important;
-  pointer-events: auto !important;
-  touch-action: manipulation !important;
-  cursor: pointer !important;
-}
-.mobile-menu {
-  display: grid !important;
-  place-items: center !important;
-  width: 38px !important;
-  height: 38px !important;
-  padding: 0 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-.mobile-menu svg { width: 20px !important; height: 20px !important; }
-.top-btn.home-btn svg { width: 19px !important; height: 19px !important; }
-.top-btn.home-btn {
-  display: grid !important;
-  place-items: center !important;
-  padding: 0 !important;
-}
-</style>
+
+</html>
