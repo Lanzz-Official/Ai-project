@@ -1,225 +1,149 @@
-module.exports = async function handler(req, res) {
+const formidable = require('formidable');
+const fs = require('fs');
 
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
+const SYSTEM_PROMPT = `
+Kamu adalah Lanzz.Ai, asisten AI pribadi Lanzz Project.
+Gunakan Bahasa Indonesia yang natural dan santai. Sesuaikan gaya user; user santai boleh memakai gua/lu.
+Jawab berdasarkan konteks yang diberikan. Jangan mengarang fakta. Jika data tidak cukup, katakan terus terang.
+Jika ada lampiran, gunakan isi lampiran yang diekstrak atau gambar yang diberikan.
+Untuk file yang tidak bisa dibaca, jelaskan keterbatasannya.
+Jawaban ringkas untuk pertanyaan sederhana dan terstruktur untuk pertanyaan kompleks.
+`;
+
+function first(v){ return Array.isArray(v) ? v[0] : v; }
+function field(fields,name,fallback=''){ const v=first(fields?.[name]); return typeof v==='string'?v:fallback; }
+function filesArray(files){ const v=files?.files || []; return (Array.isArray(v)?v:[v]).filter(Boolean); }
+function parseForm(req){
+  return new Promise((resolve,reject)=>{
+    const form=formidable({multiples:true,maxFileSize:25*1024*1024,keepExtensions:true});
+    form.parse(req,(err,fields,files)=>err?reject(err):resolve({fields,files}));
+  });
+}
+function fileBuffer(file){ return fs.readFileSync(file.filepath); }
+function dataUrl(file){ return `data:${file.mimetype||'application/octet-stream'};base64,${fileBuffer(file).toString('base64')}`; }
+
+async function transcribe(file){
+  const key=process.env.OPENAI_API_KEY;
+  if(!key) throw new Error('Voice note membutuhkan OPENAI_API_KEY.');
+  const form=new FormData();
+  form.append('file',new Blob([fileBuffer(file)],{type:file.mimetype||'audio/webm'}),file.originalFilename||'voice.webm');
+  form.append('model',process.env.OPENAI_TRANSCRIBE_MODEL||'gpt-4o-mini-transcribe');
+  form.append('language','id');
+  const r=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:`Bearer ${key}`},body:form});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.error?.message||'Transkripsi voice gagal.');
+  return d.text||'';
+}
+
+async function extractFile(file){
+  const name=file.originalFilename||'file';
+  const type=file.mimetype||'';
+  const size=file.size||0;
+  if(type.startsWith('text/') || /\.(txt|md|csv|json|log)$/i.test(name)){
+    const text=fileBuffer(file).toString('utf8');
+    return {name,type,size,text:text.slice(0,30000)};
   }
-
-  try {
-
-    const { message } = req.body || {};
-
-    if (!message) {
-      return res.status(400).json({
-        error: "Pesan kosong"
-      });
-    }
-
-    const input = message.toLowerCase().trim();
-
-
-    // GREETING HANDLER
-    const greetings = [
-  "Haloo, ada apa? 👀",
-  "Yo, Lanzz.Ai hadir. Ada yang mau dibahas?",
-  "Oyy, kenapa nih? 🗿",
-  "Halo halo, ada masalah atau cuma ngecek gua masih hidup? 😶",
-  "P? masuk. Ada apa?",
-  "Hai, cerita aja. Gua dengerin 👍",
-  "Waduh dipanggil nih, ada apa? 😎",
-  "Yo bro, butuh bantuan apa?"
-];
-
-const isGreeting =
-/^(p+|ping+|halo+|haloo+|hai+|hay+|hey+|hi+|hello+|helo+|allo+|allow+|alow+|yo+|tes+|test+|cek+|coba+|oy+|oyy+|woy+|woyy+|woi+|bro|bang|gan|bos|cuy|permisi|misi|eh+)$/i
-.test(input);
-
-
-const isIslamicGreeting =
-/^assalamualaikum( wr wb)?$/i.test(input);
-
-
-if (isIslamicGreeting) {
-  return res.status(200).json({
-    reply: "Waalaikumsalam 👋 Ada yang bisa Lanzz.Ai bantu?"
-  });
-}
-
-
-if (isGreeting) {
-  return res.status(200).json({
-    reply: greetings[Math.floor(Math.random() * greetings.length)]
-  });
-}
-
-
-
-    const apiKey = process.env.OPENROUTER_API_KEY;
-
-
-    if (!apiKey) {
-      return res.status(500).json({
-        error: "API key teu aya"
-      });
-    }
-
-
-
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-          "HTTP-Referer": "https://lanzz-ai-lanzz-project.vercel.app",
-          "X-Title": "Lanzz.AI"
-        },
-
-
-        body: JSON.stringify({
-
-          model: "meta-llama/llama-3.1-8b-instruct",
-
-          messages: [
-
-            {
-              role: "system",
-              content: `
-Kamu adalah Lanzz.Ai.
-
-IDENTITAS:
-Lanzz.Ai adalah AI pribadi yang memiliki karakter sendiri.
-Anggap user sebagai teman ngobrol, bukan pelanggan.
-Jangan terdengar seperti customer service atau chatbot formal.
-
-BAHASA:
-- Gunakan Bahasa Indonesia santai.
-- Jangan gunakan Bahasa Sunda.
-- Jangan gunakan Bahasa Jawa.
-- Gunakan gaya ngobrol anak muda.
-- Hindari bahasa terlalu baku dan kaku.
-- Sesuaikan penjelasan dengan situasi.
-
-KEPRIBADIAN:
-- Santai.
-- Friendly.
-- Punya gaya sendiri.
-- Lucu seperlunya.
-- Sedikit jahil jika situasinya cocok.
-- Bisa absurd dan sarkas ringan.
-- Jangan memaksakan candaan.
-- Tetap membantu sebagai prioritas.
-
-GAYA BICARA:
-- Jangan selalu membuka dengan "Tentu", "Baik", atau "Dengan senang hati".
-- Jangan terdengar seperti buku panduan.
-- Gunakan variasi jawaban.
-- Kalau user bercanda, ikut bercanda.
-- Kalau user serius, fokus membantu.
-- Kalau user salah, koreksi dengan santai.
-
-MOOD USER:
-- User bercanda → balas santai.
-- User kesal → tetap tenang.
-- User bingung → bantu dengan jelas.
-- User hanya menyapa → jangan jawab panjang.
-
-EMOJI:
-Gunakan emoji hanya jika cocok.
-Emoji yang boleh digunakan:
-🗿😎🤔🤨🙄😶😏😪😴😒😓😳🤮🤢👍👋🙌🙏👀🧠
-
-Aturan emoji:
-- Maksimal 1-2 emoji dalam satu jawaban.
-- Jangan setiap kalimat memakai emoji.
-- Jangan gunakan emoji pada topik serius.
-
-HUMOR:
-- Boleh bercanda dan absurd.
-- Boleh sarkas ringan untuk lucu-lucuan.
-- Jangan menghina user.
-- Jangan menyerang fisik, agama, suku, atau hal sensitif.
-
-CONTOH GAYA:
-
-User:
-"Halo"
-
-Lanzz.Ai:
-"Haloo, ada apa? 👀"
-
-User:
-"Kamu siapa?"
-
-Lanzz.Ai:
-"Gua Lanzz.Ai 🗿 Temen ngobrol digital yang kadang serius, kadang random kalau suasana mendukung."
-
-User:
-"Website gua error"
-
-Lanzz.Ai:
-"Waduh, websitenya kayak lagi mogok kerja 🗿 Kirim error-nya, kita cari yang bikin dia ngamuk."
-
-CARA MENJAWAB:
-- Pertanyaan sederhana → jawab singkat.
-- Pertanyaan sulit → jelaskan jelas dan terstruktur.
-- Jika user meminta kode → berikan kode rapi dan cek kemungkinan error.
-- Jika informasi kurang → tanyakan detail.
-- Jangan membuat jawaban panjang tanpa alasan.
-
-ATURAN PENTING:
-- Jangan bilang "Sebagai AI" kecuali ditanya.
-- Jangan mengaku manusia.
-- Jangan mengulang kalimat yang sama terus.
-- Tetap menjadi Lanzz.Ai dengan karakter santai, lucu, dan membantu.
-`
-            },
-
-            {
-              role: "user",
-              content: message
-            }
-
-          ],
-
-          temperature: 0.8,
-          max_tokens: 500
-
-        })
+  if(type==='application/pdf' || /\.pdf$/i.test(name)){
+    try{
+      const pdfParse=require('pdf-parse');
+      const out=await pdfParse(fileBuffer(file));
+      return {name,type,size,text:(out.text||'').slice(0,30000),pages:out.numpages};
+    }catch(e){ return {name,type,size,error:'PDF tidak berhasil diekstrak: '+e.message}; }
+  }
+  if(type==='application/vnd.openxmlformats-officedocument.wordprocessingml.document' || /\.docx$/i.test(name)){
+    try{
+      const mammoth=require('mammoth');
+      const out=await mammoth.extractRawText({buffer:fileBuffer(file)});
+      return {name,type,size,text:(out.value||'').slice(0,30000)};
+    }catch(e){ return {name,type,size,error:'DOCX tidak berhasil diekstrak: '+e.message}; }
+  }
+  if(/\.(xlsx|xls)$/i.test(name) || /spreadsheet|excel/i.test(type)){
+    try{
+      const XLSX=require('xlsx');
+      const wb=XLSX.read(fileBuffer(file),{type:'buffer'});
+      const parts=[];
+      for(const sheet of wb.SheetNames.slice(0,10)){
+        const csv=XLSX.utils.sheet_to_csv(wb.Sheets[sheet]);
+        parts.push(`SHEET: ${sheet}\n${csv.slice(0,12000)}`);
       }
-    );
-
-
-    const data = await response.json();
-
-
-    if (!response.ok) {
-
-      console.log("OPENROUTER ERROR:", data);
-
-      return res.status(500).json({
-        error: data.error?.message || "AI error"
-      });
-
-    }
-
-
-    return res.status(200).json({
-      reply: data.choices[0].message.content
-    });
-
-
-  } catch (error) {
-
-    console.log(error);
-
-    return res.status(500).json({
-      error: error.message
-    });
-
+      return {name,type,size,text:parts.join('\n\n').slice(0,30000),sheets:wb.SheetNames};
+    }catch(e){ return {name,type,size,error:'Spreadsheet tidak berhasil dibaca: '+e.message}; }
   }
-
+  return {name,type,size,unsupported:true};
 }
+
+async function callChat({message,history,files}){
+  const key=process.env.OPENROUTER_API_KEY;
+  if(!key) throw new Error('OPENROUTER_API_KEY belum diatur di environment server.');
+  let finalMessage=message||'';
+  const content=[];
+  const notes=[];
+  let transcript='';
+  const extracted=[];
+
+  for(const file of files){
+    const type=file.mimetype||''; const name=file.originalFilename||'file';
+    if(type.startsWith('audio/')){
+      transcript=await transcribe(file);
+      if(transcript) finalMessage=finalMessage?`${finalMessage}\n\n[Transkrip voice]\n${transcript}`:transcript;
+      notes.push(`Voice note ${name} sudah ditranskrip.`);
+    } else if(type.startsWith('image/')){
+      if((file.size||0)<=7*1024*1024){
+        content.push({type:'image_url',image_url:{url:dataUrl(file)}});
+        notes.push(`Gambar ${name} dapat dianalisis.`);
+      } else notes.push(`Gambar ${name} terlalu besar untuk vision.`);
+    } else {
+      const x=await extractFile(file);
+      extracted.push(x);
+      if(x.text) notes.push(`Isi ${name}:\n${x.text}`);
+      else if(x.unsupported) notes.push(`File ${name} (${type}) belum didukung untuk ekstraksi isi.`);
+      else if(x.error) notes.push(x.error);
+    }
+  }
+  if(finalMessage) content.unshift({type:'text',text:finalMessage});
+  if(notes.length) content.push({type:'text',text:'[Lampiran]\n'+notes.join('\n\n')});
+  if(!content.length) content.push({type:'text',text:'Tolong bantu.'});
+
+  const safeHistory=(Array.isArray(history)?history:[]).filter(x=>x&&(x.role==='user'||x.role==='assistant')).slice(-20).map(x=>({role:x.role,content:String(x.content||'').slice(0,12000)}));
+  const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${key}`,'HTTP-Referer':process.env.APP_URL||'http://localhost','X-Title':'Lanzz.AI'},body:JSON.stringify({model:process.env.OPENROUTER_MODEL||'openai/gpt-4.1-mini',messages:[{role:'system',content:SYSTEM_PROMPT},...safeHistory,{role:'user',content}],temperature:.6,max_tokens:Number(process.env.OPENROUTER_MAX_TOKENS||1200)})});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.error?.message||'OpenRouter gagal.');
+  return {reply:d.choices?.[0]?.message?.content||'AI tidak memberi jawaban.',transcript,extracted:extracted.map(x=>({name:x.name,type:x.type,size:x.size,pages:x.pages,sheets:x.sheets,error:x.error,chars:x.text?.length||0}))};
+}
+
+async function imageEdit(file,prompt){
+  const key=process.env.OPENAI_API_KEY;
+  if(!key) throw new Error('AI edit gambar membutuhkan OPENAI_API_KEY.');
+  const form=new FormData();
+  form.append('model','gpt-image-2');
+  form.append('prompt',prompt||'Edit gambar ini sesuai instruksi, pertahankan elemen yang tidak diminta untuk diubah.');
+  form.append('image',new Blob([fileBuffer(file)],{type:file.mimetype||'image/png'}),file.originalFilename||'image.png');
+  form.append('size','auto');
+  const r=await fetch('https://api.openai.com/v1/images/edits',{method:'POST',headers:{Authorization:`Bearer ${key}`},body:form});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.error?.message||'AI image edit gagal.');
+  const b64=d.data?.[0]?.b64_json;
+  if(!b64) throw new Error('AI tidak mengembalikan gambar hasil edit.');
+  return {dataUrl:`data:image/png;base64,${b64}`};
+}
+
+module.exports=async function handler(req,res){
+  if(req.method!=='POST') return res.status(405).json({error:'Method not allowed'});
+  try{
+    let fields={},files={};
+    const ct=String(req.headers['content-type']||'');
+    if(ct.includes('multipart/form-data'))({fields,files}=await parseForm(req));
+    else fields=req.body||{};
+    const action=field(fields,'action','chat');
+    const uploaded=filesArray(files);
+    if(action==='image-edit'){
+      const image=uploaded.find(f=>(f.mimetype||'').startsWith('image/'));
+      if(!image) return res.status(400).json({error:'Gambar untuk diedit belum dikirim.'});
+      const result=await imageEdit(image,field(fields,'prompt','Edit gambar ini sesuai instruksi.'));
+      return res.status(200).json(result);
+    }
+    let history=[]; try{history=JSON.parse(field(fields,'history','[]'));}catch{}
+    const result=await callChat({message:field(fields,'message','').trim(),history,files:uploaded});
+    return res.status(200).json(result);
+  }catch(e){ console.error(e); return res.status(500).json({error:e.message||'Server error'}); }
+};
