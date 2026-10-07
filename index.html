@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#14100c">
-<meta name="description" content="Razki.Ai — asisten virtual Villa Razki View Sawarna">
-<title>Razki.Ai — Asisten Villa Razki View Sawarna</title>
+<meta name="description" content="Razki.Ai - asisten virtual Villa Razki View Sawarna">
+<title>Razki.Ai - Asisten Villa Razki View Sawarna</title>
 <style>
 :root{
   --bg:#0c0906;
   --bg2:#14100c;
   --panel:rgba(20,16,12,.85);
   --panel-2:#1a1510;
+  --panel-3:#221b14;
   --line:rgba(201,162,39,.18);
   --line-2:rgba(201,162,39,.32);
   --text:#faf7f1;
@@ -20,7 +21,8 @@
   --gold-2:#b8912a;
   --gold-soft:#e3cd8a;
   --cream:#faf7f1;
-  --danger:#ff5b78;
+  --danger:#e5504a;
+  --danger-2:#c93f39;
   --shadow:0 20px 60px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -42,7 +44,7 @@ textarea{font:inherit;color:inherit}
 ::-webkit-scrollbar-thumb{background:rgba(201,162,39,.2);border-radius:10px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(201,162,39,.4)}
 
-/* ========= FLOATING BUTTONS (kiri atas = Home, kanan atas = Hapus) ========= */
+/* ========= FLOATING BUTTONS ========= */
 .float-btn{
   position:fixed;
   top:calc(14px + env(safe-area-inset-top));
@@ -74,7 +76,7 @@ textarea{font:inherit;color:inherit}
 .clear-btn:hover{
   background:var(--danger);
   border-color:var(--danger);
-  box-shadow:0 10px 24px rgba(255,91,120,.35);
+  box-shadow:0 10px 24px rgba(229,80,74,.35);
 }
 
 /* ========= CHAT SHELL ========= */
@@ -228,6 +230,134 @@ textarea{font:inherit;color:inherit}
   opacity:.7;
 }
 
+/* ========= CUSTOM MODAL ========= */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  display:grid;place-items:center;
+  padding:20px;
+  opacity:0;visibility:hidden;
+  transition:opacity .25s ease, visibility .25s ease;
+}
+.modal-backdrop.open{opacity:1;visibility:visible}
+
+.modal-card{
+  width:min(400px,100%);
+  background:linear-gradient(160deg,#1c1610,#14100c);
+  border:1px solid var(--line-2);
+  border-radius:22px;
+  padding:28px 24px 22px;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(201,162,39,.06) inset;
+  transform:scale(.92) translateY(10px);
+  opacity:0;
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.2), opacity .3s ease;
+  position:relative;
+  overflow:hidden;
+}
+.modal-backdrop.open .modal-card{
+  transform:scale(1) translateY(0);
+  opacity:1;
+}
+.modal-card::before{
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:60%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.6;
+}
+
+.modal-icon{
+  width:64px;height:64px;margin:0 auto 18px;
+  border-radius:20px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-2));
+  display:grid;place-items:center;
+  box-shadow:0 0 32px rgba(201,162,39,.35), inset 0 1px rgba(255,255,255,.3);
+  position:relative;
+}
+.modal-icon::before{
+  content:"";position:absolute;inset:-8px;border-radius:26px;
+  border:1px solid rgba(201,162,39,.2);
+}
+.modal-icon svg{width:32px;height:32px}
+.modal-icon.danger{
+  background:linear-gradient(135deg,var(--danger),var(--danger-2));
+  box-shadow:0 0 32px rgba(229,80,74,.35), inset 0 1px rgba(255,255,255,.3);
+}
+.modal-icon.danger::before{border-color:rgba(229,80,74,.25)}
+
+.modal-title{
+  font-size:19px;font-weight:700;
+  margin:0 0 8px;
+  letter-spacing:-.3px;
+  color:var(--text);
+}
+.modal-desc{
+  font-size:13.5px;
+  color:var(--muted);
+  line-height:1.6;
+  margin:0 0 22px;
+  padding:0 6px;
+}
+
+.modal-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.modal-btn{
+  padding:13px 16px;
+  border-radius:12px;
+  font-size:13.5px;
+  font-weight:600;
+  letter-spacing:.02em;
+  transition:all .22s cubic-bezier(.16,.84,.44,1);
+  border:1px solid transparent;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.modal-btn svg{width:15px;height:15px;flex:none}
+
+.modal-btn.cancel{
+  background:rgba(255,255,255,.05);
+  border-color:var(--line);
+  color:var(--text);
+}
+.modal-btn.cancel:hover{
+  background:rgba(255,255,255,.1);
+  border-color:var(--line-2);
+  transform:translateY(-1px);
+}
+.modal-btn.cancel:active{transform:scale(.97)}
+
+.modal-btn.confirm{
+  background:linear-gradient(135deg,var(--danger),var(--danger-2));
+  color:#fff;
+  box-shadow:0 8px 22px rgba(229,80,74,.28);
+}
+.modal-btn.confirm:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 28px rgba(229,80,74,.42);
+}
+.modal-btn.confirm:active{transform:scale(.97)}
+
+.modal-btn.confirm.gold{
+  background:linear-gradient(135deg,var(--gold),var(--gold-2));
+  box-shadow:0 8px 22px rgba(201,162,39,.28);
+}
+.modal-btn.confirm.gold:hover{
+  box-shadow:0 12px 28px rgba(201,162,39,.42);
+}
+
+@media(max-width:480px){
+  .modal-card{padding:24px 20px 18px;border-radius:20px}
+  .modal-icon{width:56px;height:56px;border-radius:18px;margin-bottom:16px}
+  .modal-icon svg{width:28px;height:28px}
+  .modal-title{font-size:17.5px}
+  .modal-desc{font-size:13px;margin-bottom:20px}
+  .modal-btn{padding:12px 14px;font-size:13px}
+}
+
 /* ========= ANIMATIONS ========= */
 @keyframes heroIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -308,6 +438,35 @@ textarea{font:inherit;color:inherit}
   </footer>
 </main>
 
+<!-- ========= CUSTOM CONFIRM MODAL ========= -->
+<div class="modal-backdrop" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal-card" id="confirmCard">
+    <div class="modal-icon" id="confirmIcon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2.7l2.3 6.9L21.2 12l-6.9 2.3L12 21.3l-2.3-7L2.8 12l6.9-2.3z"/>
+        <path d="M19 3v4M21 5h-4"/>
+      </svg>
+    </div>
+    <h2 class="modal-title" id="confirmTitle">Hapus percakapan?</h2>
+    <p class="modal-desc" id="confirmDesc">Semua chat akan dihapus permanen dari perangkat ini.</p>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="confirmCancel" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <span>Batal</span>
+      </button>
+      <button class="modal-btn confirm" id="confirmOk" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"/>
+          <path d="M8 6V4h8v2"/>
+          <path d="M19 6l-1 14H6L5 6"/>
+          <path d="M10 11v5M14 11v5"/>
+        </svg>
+        <span>Hapus</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 'use strict';
 
@@ -317,6 +476,7 @@ const STORE = 'conversations';
 let current = null;
 let isGenerating = false;
 let activeAbort = null;
+let confirmResolve = null;
 
 const $ = s => document.querySelector(s);
 const uid = () => 'chat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
@@ -383,6 +543,48 @@ function scrollDown(force){
   }
 }
 
+/* ============ CUSTOM CONFIRM MODAL ============ */
+function showConfirm(opts){
+  return new Promise(resolve => {
+    const modal = $('#confirmModal');
+    const icon = $('#confirmIcon');
+    const title = $('#confirmTitle');
+    const desc = $('#confirmDesc');
+    const okBtn = $('#confirmOk');
+    const cancelBtn = $('#confirmCancel');
+
+    if(!modal) { resolve(false); return; }
+
+    title.textContent = opts.title || 'Konfirmasi';
+    desc.textContent = opts.desc || '';
+    okBtn.querySelector('span').textContent = opts.okText || 'Hapus';
+    cancelBtn.querySelector('span').textContent = opts.cancelText || 'Batal';
+
+    const isDanger = false;
+    icon.classList.remove('danger');
+    okBtn.classList.remove('gold');
+
+    if(opts.okIcon){
+      okBtn.querySelector('svg').innerHTML = opts.okIcon;
+    }
+
+    confirmResolve = resolve;
+    modal.classList.add('open');
+
+    const cleanup = () => {
+      modal.classList.remove('open');
+      okBtn.onclick = null;
+      cancelBtn.onclick = null;
+      modal.onclick = null;
+      confirmResolve = null;
+    };
+
+    okBtn.onclick = () => { if(confirmResolve) confirmResolve(true); cleanup(); };
+    cancelBtn.onclick = () => { if(confirmResolve) confirmResolve(false); cleanup(); };
+    modal.onclick = (e) => { if(e.target === modal){ if(confirmResolve) confirmResolve(false); cleanup(); } };
+  });
+}
+
 /* ============ HERO / HOME ============ */
 function showHero(){
   const h = $('#hero'); if(h) h.style.display = 'block';
@@ -416,12 +618,17 @@ function goHome(){
 async function clearChat(){
   const hasMessages = current && current.messages && current.messages.length > 0;
 
-  let msg = 'Hapus percakapan ini?';
-  if(!hasMessages){
-    msg = 'Belum ada percakapan aktif. Hapus semua data chat dari penyimpanan?';
-  }
+  const confirmed = await showConfirm({
+    title: 'Hapus percakapan?',
+    desc: hasMessages
+      ? 'Semua chat akan dihapus permanen dari perangkat ini.'
+      : 'Belum ada percakapan aktif. Hapus semua data chat dari penyimpanan?',
+    okText: 'Hapus',
+    cancelText: 'Batal',
+    danger: true
+  });
 
-  if(!window.confirm(msg)) return;
+  if(!confirmed) return;
 
   try{
     await clearAll();
@@ -443,7 +650,13 @@ async function clearChat(){
     if(input) input.focus();
   }catch(err){
     console.error(err);
-    alert('Gagal menghapus percakapan. Coba lagi.');
+    await showConfirm({
+      title: 'Gagal menghapus',
+      desc: 'Terjadi kesalahan saat menghapus percakapan. Coba lagi.',
+      okText: 'Tutup',
+      cancelText: 'Tutup',
+      danger: false
+    });
   }
 }
 
@@ -658,8 +871,15 @@ $('#homeBtn')?.addEventListener('click', goHome);
 $('#clearBtn')?.addEventListener('click', clearChat);
 
 document.addEventListener('keydown', e => {
-  if(e.key === 'Escape' && isGenerating && activeAbort){
-    try{ activeAbort.abort(); }catch(err){}
+  if(e.key === 'Escape'){
+    if($('#confirmModal')?.classList.contains('open')){
+      const cancelBtn = $('#confirmCancel');
+      if(cancelBtn) cancelBtn.click();
+      return;
+    }
+    if(isGenerating && activeAbort){
+      try{ activeAbort.abort(); }catch(err){}
+    }
   }
 });
 
@@ -680,6 +900,5 @@ document.addEventListener('keydown', e => {
   autoGrow();
 })();
 </script>
-  
 </body>
 </html>
