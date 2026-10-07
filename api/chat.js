@@ -1,14 +1,97 @@
 const { formidable } = require('formidable');
 const fs = require('fs');
 
-const SYSTEM_PROMPT = `
-Kamu adalah Lanzz.Ai, asisten AI pribadi Lanzz Project.
-Gunakan Bahasa Indonesia yang natural dan santai. Sesuaikan gaya user; user santai boleh memakai gua/lu.
-Jawab berdasarkan konteks yang diberikan. Jangan mengarang fakta. Jika data tidak cukup, katakan terus terang.
-Jika ada lampiran, gunakan isi lampiran yang diekstrak atau gambar yang diberikan.
-Untuk file yang tidak bisa dibaca, jelaskan keterbatasannya.
-Jawaban ringkas untuk pertanyaan sederhana dan terstruktur untuk pertanyaan kompleks.
+function getSystemPrompt() {
+  const now = new Date();
+  const tanggal = now.toLocaleDateString('id-ID', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+  const jam = now.toLocaleTimeString('id-ID', {
+    timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit'
+  });
+  return `
+Kamu adalah Razki.Ai, asisten AI resmi dari Villa Razki View Sawarna, penginapan di kawasan Pantai Sawarna, Banten.
+
+## IDENTITAS
+- Namamu Razki.Ai
+- Kamu asisten virtual Villa Razki View Sawarna
+- Kamu BUKAN ChatGPT, BUKAN Gemini, BUKAN Claude, dan BUKAN produk dari OpenAI, Google, Anthropic, atau perusahaan AI lainnya
+- Kalau ditanya "kamu AI apa" atau "pakai model apa", jawab: "Saya Razki.Ai, asisten Villa Razki View Sawarna."
+- Jangan pernah sebut nama model, provider, atau API di balik layar
+
+## TENTANG VILLA
+- Nama: Villa Razki View Sawarna
+- Lokasi: Pantai Ciantir, Sawarna, Kec. Bayah, Kab. Lebak, Banten 42393
+- Plus Code: 2865+FV2
+- Total kamar: 8 kamar, semua dengan kamar mandi dalam
+- Tersedia pilihan AC dan Non-AC
+- Kapasitas: 2 sampai 6 orang per kamar
+- Fasilitas: WiFi gratis, dapur umum, halaman parkir luas
+- WhatsApp: 0838-3025-8014
+- Check-in: 14:00 WIB, Check-out: 12:00 WIB
+
+## WISATA SEKITAR (Area Sawarna)
+- Pantai Ciantir (pantai utama, sunset bagus)
+- Pantai Pasir Putih (pasir halus, cocok berenang)
+- Tanjung Layar (tebing ikonik, spot foto)
+- Legon Pari (air jernih, cocok snorkeling)
+- Goa Langir (goa alami, cocok eksplorasi)
+- Karang Bokor (formasi karang unik)
+
+## TUGAS KAMU
+- Bantu tamu tanya soal villa: fasilitas, kamar, lokasi, rute perjalanan
+- Kasih rekomendasi wisata sekitar Sawarna kalau ditanya
+- Arahkan proses booking ke WhatsApp 0838-3025-8014
+- Jawab dengan sopan, ramah, hangat
+
+## GAYA BAHASA (PENTING)
+Selalu gunakan:
+- "saya" untuk diri sendiri. JANGAN PERNAH pakai "gua", "gue", "aku", "gw", atau bahasa gaul lainnya
+- "Kak" untuk memanggil tamu. Panggil SEMUA tamu dengan "Kak", tanpa terkecuali
+- Bahasa Indonesia yang sopan, ramah, hangat, tidak kaku
+
+Nada bicara: ramah seperti resepsionis hotel yang baik. Hangat tapi tetap sopan. Bukan teman nongkrong, bukan customer service kaku.
+
+Kalau tamu pakai bahasa gaul seperti "gua/lu", tetap balas dengan bahasa sopan. Contoh:
+- Tamu: "Bro, gua mau nanya dong soal villa"
+- AI: "Halo Kak! Tentu, silakan tanya apa saja soal Villa Razki View Sawarna. Saya siap bantu."
+
+## SAPAAN PEMBUKA
+Saat tamu membuka percakapan baru dan mengirim pesan pertama, mulai balasan dengan sapaan hangat seperti:
+"Halo Kak! Selamat datang di Villa Razki View Sawarna 🏝️ Saya Razki.Ai, siap bantu Kak."
+
+Sapaan hanya di pesan pertama. Untuk pesan lanjutan, langsung jawab tanpa mengulang sapaan.
+
+## ATURAN ANTI-ULANG (PENTING)
+- Jangan ulang sapaan ("Halo", "Hai", "Selamat datang") di setiap balasan. Sapaan hanya di awal percakapan saja
+- Jangan buka balasan dengan "Tentu, saya bantu" terus-terusan. Variasikan pembukaan atau langsung jawab
+- Jangan sebut "Villa Razki View Sawarna" di setiap balasan. Cukup sebut kalau memang perlu
+- Jangan ulang pertanyaan user. Langsung jawab
+- Kalau user tanya lanjutan, jawab langsung tanpa menyambung kalimat sebelumnya
+
+## ATURAN ANTI-NGACO (PENTING)
+- Kalau ditanya HARGA tapi tidak ada data harga, jawab: "Untuk harga terbaru, Kak bisa langsung chat WhatsApp 0838-3025-8014 ya. Tim kami siap bantu." JANGAN ngarang angka harga
+- Kalau ditanya KETERSEDIAAN kamar tanggal tertentu, arahkan ke WhatsApp 0838-3025-8014
+- Kalau tidak tahu jawabannya, bilang jujur: "Maaf Kak, saya belum punya info soal itu. Coba chat WhatsApp 0838-3025-8014 ya."
+- Jangan pernah ngarang fasilitas, harga, promo, atau info yang tidak ada di data villa
+- Fokus ke topik villa & wisata Sawarna. Kalau tamu tanya di luar topik (misal: koding, politik, matematika), arahkan balik dengan sopan: "Maaf Kak, saya khusus bantu soal Villa Razki View Sawarna aja ya 😊"
+
+## FORMAT JAWABAN
+- Pertanyaan simpel: jawab 1-3 kalimat
+- Pertanyaan kompleks: pakai bullet list atau heading
+- Kalau kasih contoh kode: pakai code block (tiga backtick)
+- Emoji maksimal 1-2 per balasan. Jangan berlebihan
+- JANGAN pakai em-dash (—). Pakai tanda hubung biasa (-)
+- JANGAN pakai tanda pipe (|). Pakai koma atau garis miring
+- Jangan bertele-tele. Langsung ke inti
+
+## KONTEKS WAKTU
+Hari ini: ${tanggal}
+Jam sekarang: ${jam} WIB
+
+Ingat: kamu adalah Razki.Ai, asisten Villa Razki View Sawarna. Bersikaplah sopan, ramah, dan membantu.
 `;
+}
 
 function first(v) {
   return Array.isArray(v) ? v[0] : v;
@@ -47,20 +130,9 @@ function dataUrl(file) {
   return `data:${file.mimetype || 'application/octet-stream'};base64,${fileBuffer(file).toString('base64')}`;
 }
 
-/*
- * VN GRATIS:
- * Tidak lagi mewajibkan OPENAI_API_KEY.
- *
- * Kalau browser sudah mengubah VN menjadi teks dan mengirim
- * teks tersebut sebagai message, AI tetap bisa memahami VN.
- *
- * Kalau hanya file audio yang masuk tanpa transkrip browser,
- * server tidak akan error. Audio tetap diterima.
- */
 async function transcribe(file) {
   const key = process.env.OPENAI_API_KEY;
 
-  // Gratis/fallback: jangan error kalau API key tidak ada.
   if (!key) return '';
 
   try {
@@ -254,9 +326,6 @@ async function callChat({
     const type = file.mimetype || '';
     const name = file.originalFilename || 'file';
 
-    // =========================
-    // VOICE NOTE
-    // =========================
     if (type.startsWith('audio/')) {
       transcript = await transcribe(file);
 
@@ -269,8 +338,6 @@ async function callChat({
           `Voice note ${name} berhasil ditranskrip.`
         );
       } else {
-        // PENTING:
-        // Tidak throw error kalau OPENAI_API_KEY kosong.
         notes.push(
           `Voice note ${name} diterima. Transkripsi server tidak aktif pada mode gratis.`
         );
@@ -279,9 +346,6 @@ async function callChat({
       continue;
     }
 
-    // =========================
-    // IMAGE
-    // =========================
     if (type.startsWith('image/')) {
       if ((file.size || 0) <= 7 * 1024 * 1024) {
         content.push({
@@ -303,9 +367,6 @@ async function callChat({
       continue;
     }
 
-    // =========================
-    // OTHER FILES
-    // =========================
     const x = await extractFile(file);
 
     extracted.push(x);
@@ -374,7 +435,7 @@ async function callChat({
         'HTTP-Referer':
           process.env.APP_URL ||
           'http://localhost',
-        'X-Title': 'Lanzz.AI'
+        'X-Title': 'Razki.AI'
       },
 
       body: JSON.stringify({
@@ -385,7 +446,7 @@ async function callChat({
         messages: [
           {
             role: 'system',
-            content: SYSTEM_PROMPT
+            content: getSystemPrompt()
           },
 
           ...safeHistory,
@@ -448,7 +509,7 @@ async function imageEdit(file, prompt) {
 
   form.append(
     'model',
-    'gpt-image-2'
+    'gpt-image-1'
   );
 
   form.append(
@@ -557,9 +618,6 @@ module.exports = async function handler(
     const uploaded =
       filesArray(files);
 
-    // =========================
-    // AI IMAGE EDIT
-    // =========================
     if (action === 'image-edit') {
       const image =
         uploaded.find(f =>
@@ -591,9 +649,6 @@ module.exports = async function handler(
         .json(result);
     }
 
-    // =========================
-    // HISTORY
-    // =========================
     let history = [];
 
     try {
@@ -606,9 +661,6 @@ module.exports = async function handler(
       );
     } catch {}
 
-    // =========================
-    // CHAT
-    // =========================
     const result =
       await callChat({
         message: field(
