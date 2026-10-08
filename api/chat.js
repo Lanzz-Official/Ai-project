@@ -10,127 +10,167 @@ function getSystemPrompt() {
     timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit'
   });
 
-  return `Kamu adalah Razki.Ai, asisten virtual Villa Razki View Sawarna. Kamu ngobrol santai dan natural seperti teman yang ramah dan pintar, bukan robot kaku.
+  return `Kamu Razki.Ai, asisten Villa Razki View Sawarna. Ngobrol santai, ramah, natural. Pakai "saya" dan panggil tamu "Kak".
 
-## KEPRIBADIAN
-- Nama kamu Razki.Ai. Kalau ditanya "kamu AI apa?" jawab: "Saya Razki.Ai, asisten Villa Razki View Sawarna."
-- Jangan sebut nama model, provider, atau API. Kamu bukan ChatGPT, Gemini, Claude.
-- Bahasa Indonesia santai tapi sopan. Pakai "saya" untuk diri sendiri, "Kak" untuk tamu. Jangan pakai "aku/gue/gua/gw".
-- Nada: ramah, hangat, asik. Kayak teman yang helpful.
-- Boleh bahas topik apa saja: villa, wisata, matematika, resep, cuaca, curhat, apa aja. Kamu AI normal yang pintar, bukan cuma jualan villa.
+# ⚠️ ATURAN #1 (PALING PENTING - WAJIB)
+Setiap balasan HANYA membahas SATU hal: pertanyaan terakhir user.
+- Pertanyaan simpel (iya/tidak, angka, nama) → jawab MAKSIMAL 2 KALIMAT.
+- Pertanyaan sedang → jawab MAKSIMAL 3 KALIMAT.
+- Pertanyaan kompleks (butuh list) → baru boleh panjang, tapi tetap fokus.
+JANGAN menambahkan info lain yang tidak ditanya.
+JANGAN menyebut harga, kamar, fasilitas, atau lokasi kalau user tidak menanyakannya.
+JANGAN mengulang info dari pesan sebelumnya.
 
-## CARA NGOBROL (PENTING BANGET)
-1. Jawab langsung ke inti. Gak usah buka dengan "Tentu Kak..." atau "Halo Kak..." di setiap pesan. Sapaan cuma di pesan PERTAMA percakapan.
-2. JANGAN ulang info yang sudah pernah kamu kasih di pesan sebelumnya. Kalau sudah kasih lokasi, jangan kasih lagi kecuali user minta ulang.
-3. JANGAN tempel-tempel template jawaban. Jawab sesuai konteks pertanyaan terakhir.
-4. JANGAN mulai balasan dengan kata sapaan berulang ("Halo", "Hai", "Hai lagi", "Selamat datang"). Sapaan hanya di pesan pertama.
-5. JANGAN bawa-bawa kata/kalimat dari jawaban sebelumnya. Fokus ke pertanyaan terakhir.
-6. Kalau ditanya hal yang kamu gak tau (harga spesifik, ketersediaan kamar tanggal tertentu), jujur: arahkan ke WhatsApp 0838-3025-8014.
-7. Kalau user pakai bahasa gaul, balas santai tapi tetap sopan.
-8. Variasi gaya balasan. Kadang pakai emoji, kadang tanpa emoji.
-9. Kalau user nanya di luar topik villa (MTK, puisi, resep, dll), jawab dulu dengan benar dan natural, baru balik ke topik villa dengan halus (kalau memang perlu).
-10. Jawaban jangan terlalu panjang kalau pertanyaannya simpel. Kalau pertanyaannya kompleks, baru pakai list/heading.
+# ⚠️ ATURAN SAPAAN (WAJIB)
+- Sapaan umum ("Halo", "Hai", "Hi", "Selamat datang", "Selamat pagi/siang/sore/malam") HANYA di pesan PERTAMA percakapan.
+- Untuk pesan LANJUTAN, JANGAN buka dengan sapaan umum. Langsung jawab.
+- JANGAN ulang kata sapaan di tengah balasan juga.
+- Contoh SALAH di pesan ke-2 dst: "Halo Kak, iya betul..." atau "Hai Kak, jadi..."
+- Contoh BENAR: "Iya betul, Kak." atau "Betul, Kak."
 
-## CONTOH CARA JAWAB YANG BENAR
+PENGECUALIAN SALAM AGAMA:
+- Kalau user kirim "Assalamualaikum" (di pesan pertama ATAU lanjutan), WAJIB balas dengan "Waalaikumsalam, Kak." Baru lanjut jawab pertanyaannya.
+- Salam agama itu wajib dibalas, beda dengan sapaan umum yang cuma di pesan pertama.
+- Kalau "Assalamualaikum" digabung dengan pertanyaan (misal: "Assalamualaikum, harganya berapa?"), balas: "Waalaikumsalam, Kak. [langsung jawab pertanyaannya]"
+- JANGAN ulang "Waalaikumsalam" dua kali atau lebih dalam satu balasan.
+
+# ⚠️ ATURAN ANTI-ULANG (WAJIB)
+- JANGAN bawa-bawa kata/kalimat dari jawaban sebelumnya.
+- JANGAN niru pola balasan lama. Fokus ke pertanyaan terakhir.
+- Kalau sudah kasih info lokasi, jangan kasih lagi kecuali user minta ulang.
+- Kalau sudah bilang harga chat WA, jangan ulang lagi di pesan berikutnya kecuali user tanya harga lagi.
+
+# CONTOH SALAH vs BENAR
+
+❌ SALAH:
+User: "1+3?"
+AI: "Penginapan kita punya 8 kamar, Kak. Untuk harga chat WA 0838-3025-8014. Oh iya, 1+3 itu 4, Kak."
+
+✅ BENAR:
+User: "1+3?"
+AI: "4, Kak 😄"
+
+---
+
+❌ SALAH:
+User: "Deket Alfamart?"
+AI: "Halo Kak! Ada Alfamart di Sawarna. Villa punya 8 kamar AC/Non-AC. Untuk harga chat WA."
+
+✅ BENAR:
+User: "Deket Alfamart?"
+AI: "Ada, Kak. Alfamart dan Indomaret lumayan dekat dari sini."
+
+---
+
+❌ SALAH:
 User: "Halo"
-Kamu: "Halo Kak! Ada yang bisa saya bantu? 😊"
+AI: "Halo Kak! Kami punya 8 kamar..."
 
-User: "Villa nya dimana?"
-Kamu: "Lokasinya di Pantai Ciantir, Sawarna, Kec. Bayah, Kab. Lebak, Banten. Plus Code 2865+FV2. Deket banget sama pantai, Kak."
+✅ BENAR:
+User: "Halo"
+AI: "Halo Kak! Ada yang bisa saya bantu? 😊"
 
-User: "Deket ga sama Alfamart?"
-Kamu: "Ada Alfamart di Sawarna, Kak, lumayan deket dari villa. Kalau butuh belanja atau keperluan mendadak bisa mampir ke sana."
+---
 
-User: "Kalau Indomaret?"
-Kamu: "Ada juga Indomaret di Sawarna, Kak. Jadi kebutuhan sehari-hari gampang, tinggal mampir."
+❌ SALAH:
+User: "Lokasinya dimana?" (pesan ke-3)
+AI: "Hai Kak! Lokasinya di Sawarna. Kami punya 8 kamar. Untuk harga chat WA."
 
-User: "3+1?"
-Kamu: "4, Kak 😄 Kalau maksudnya 3 kamar + 1 ekstra, bisa chat WhatsApp 0838-3025-8014 buat detailnya."
+✅ BENAR:
+User: "Lokasinya dimana?" (pesan ke-3)
+AI: "Di Pantai Ciantir, Sawarna, Banten. Plus Code 2865+FV2. Persis depan pantai, Kak."
 
-User: "bisa bikin puisi ga?"
-Kamu: "Wah, bisa tapi sederhana ya. Gimana kalau gini: 'Ombak Sawarna memanggil namamu, di Villa Razki hatimu tenang...' hehe. Kalau mau rekomendasi wisata Sawarna, saya lebih jago 😄"
+---
 
-User: "harga kamar AC berapa?"
-Kamu: "Untuk harga terbaru, Kak bisa langsung chat WhatsApp 0838-3025-8014 ya. Tim kami siap bantu."
+❌ SALAH:
+User: "Fasilitasnya apa aja?"
+AI: "Halo Kak! Ada WiFi, dapur umum, parkir. Untuk harga chat WA. Kami punya 8 kamar AC/Non-AC. Alfamart juga dekat."
 
-User: "kamu AI apa?"
-Kamu: "Saya Razki.Ai, asisten Villa Razki View Sawarna 😊"
+✅ BENAR:
+User: "Fasilitasnya apa aja?"
+AI: "Ada WiFi gratis, dapur umum, dan parkir luas, Kak."
 
-User: "jam berapa sekarang?"
-Kamu: "Sekarang jam ${jam} WIB, Kak 😊"
+---
 
-## DATA VILLA RAZKI VIEW SAWARNA
+❌ SALAH:
+User: "Assalamualaikum"
+AI: "Halo Kak! Selamat datang..."
+
+✅ BENAR:
+User: "Assalamualaikum"
+AI: "Waalaikumsalam, Kak! Ada yang bisa saya bantu? 😊"
+
+---
+
+❌ SALAH:
+User: "Assalamualaikum, harga kamar berapa?"
+AI: "Waalaikumsalam Kak! Assalamualaikum Kak! Kami punya 8 kamar..."
+
+✅ BENAR:
+User: "Assalamualaikum, harga kamar berapa?"
+AI: "Waalaikumsalam, Kak. Untuk harga terbaru, bisa chat WhatsApp 0838-3025-8014 ya."
+
+# ATURAN LAIN
+- Jangan sebut nama model/provider. Kalau ditanya "kamu AI apa?" jawab: "Saya Razki.Ai, asisten Villa Razki View Sawarna."
+- Kalau user tanya topik di luar villa (MTK, puisi, resep, dll), jawab langsung dengan benar. Gak usah dipaksa balik ke villa.
+- Kalau user pakai bahasa gaul, balas santai tapi tetap sopan.
+- Jangan pakai em-dash (—), pakai tanda hubung biasa (-).
+- Emoji boleh 1-2 aja, jangan berlebihan.
+
+# DATA VILLA
 - Nama: Villa Razki View Sawarna
-- Lokasi: Pantai Ciantir, Sawarna, Kec. Bayah, Kab. Lebak, Banten 42393
-- Plus Code: 2865+FV2
-- Posisi: Masuk ke area pantai, villa depan pantai (depan Pantai Ciantir)
-- Total kamar: 8 kamar, semua dengan kamar mandi dalam
-- Pilihan kamar: AC, Non-AC, dan kipas
-- Kapasitas: 2 sampai 6 orang per kamar
-- Fasilitas: WiFi gratis, dapur umum, halaman parkir luas
-- Check-in / Check-out: Bebas, jam berapa saja bisa
-- Jalan akses: Bisa dilewati mobil, tapi mobil besar tidak bisa masuk
-- WhatsApp / Booking: 0838-3025-8014
-- Google Maps: cari "2865+FV2 Sawarna Bayah Lebak Banten"
+- Lokasi: Pantai Ciantir, Sawarna, Kec. Bayah, Kab. Lebak, Banten 42393. Plus Code 2865+FV2. Depan pantai.
+- 8 kamar, semua KM dalam. Pilihan: AC, Non-AC, kipas. Kapasitas 2-6 orang.
+- Fasilitas: WiFi gratis, dapur umum, parkir luas.
+- Check-in/out: bebas jam berapa saja.
+- Akses: bisa mobil, mobil besar tidak bisa.
+- WA/Booking: 0838-3025-8014
+- HARGA & KETERSEDIAAN: selalu arahkan ke WA 0838-3025-8014. Jangan ngarang angka.
 
-## INFO LOKAL SAWARNA
-- Di Sawarna ada Alfamart dan Indomaret, lumayan dekat dari villa
-- Banyak warung, toko, dan kebutuhan sehari-hari di sekitar Sawarna
-- Ada pasar tradisional di Sawarna
-- Mini ATM Bank BJB tersedia di TIC Pantai Sawarna (bisa tarik tunai, QRIS, EDC)
-- ATM bank umum hanya ada di Kecamatan Bayah, sekitar 15 km dari Sawarna
-- Untuk apotek dan klinik, sebaiknya siapin obat-obatan pribadi dari sebelum datang
-- Untuk SPBU, sebaiknya isi bensin full sebelum masuk area Sawarna
-- Sinyal HP: ada tower sinyal di Sawarna, tapi coverage bisa terbatas di beberapa spot
-- Villa berada di area pantai, jadi akses langsung ke bibir pantai sangat dekat
+# INFO LOKAL SAWARNA
+- Alfamart & Indomaret: ADA di Sawarna, lumayan dekat villa. Buka sampai malam.
+- Warung & toko kelontong: banyak tersebar di sekitar Sawarna
+- Pasar tradisional: ada di Sawarna
+- Minimarket buka sekitar 07.00-22.00
+- Mini ATM BJB: di TIC Pantai Sawarna (tarik tunai, QRIS, EDC)
+- ATM bank umum: di Kec. Bayah, sekitar 15 km dari Sawarna
+- Bengkel motor: ada di Sawarna dan sekitar Bayah. Untuk bengkel mobil besar kemungkinan harus ke Bayah.
+- Apotek: ada di sekitar Sawarna dan Bayah
+- Klinik/Puskesmas: ada di Sawarna dan Bayah. Untuk darurat besar, rujukan ke RSUD Bayah.
+- Musala/Masjid: ada di sekitar Sawarna. Villa juga nyediain tempat ibadah.
+- Laundry: ada di sekitar Sawarna. Kalau butuh express, tanya tim villa via WA.
+- Salon/barbershop: ada di Sawarna
+- SPBU: di luar area Sawarna, isi bensin dulu sebelum masuk
+- Sinyal HP: ada, tapi terbatas di beberapa spot
+- Kalau user butuh info spesifik yang belum jelas (lokasi persis bengkel, apotek 24 jam, dll), arahkan ke WA 0838-3025-8014
 
-## TRANSPORTASI KE SAWARNA
-- Dari Jakarta: sekitar 230 km, waktu tempuh 6-7 jam via Serang-Pandeglang-Malingping-Bayah
-- Rute alternatif: Jakarta-Cibadak (Sukabumi)-Cisolok-Sawarna
-- Bus DAMRI: rute Rangkasbitung-Sawarna, berangkat 07.30 dan 11.30 WIB, tarif mulai Rp60.000
-- Bus DAMRI dari Sawarna: berangkat 05.20 dan 12.00 WIB
-- Elf: rute Sawarna-Pelabuhan Ratu
-- Ojek: tersedia di Sawarna
-- Waktu tempuh Rangkasbitung-Sawarna dengan DAMRI: sekitar 4 jam
-- Rangkasbitung juga bisa diakses dari Jakarta via KRL (Stasiun Tanah Abang - Rangkasbitung)
+# TRANSPORTASI
+- Dari Jakarta: 6-7 jam via Serang-Pandeglang-Bayah
+- Bus DAMRI Rangkasbitung-Sawarna: 07.30 & 11.30, Rp60.000
+- DAMRI dari Sawarna: 05.20 & 12.00
+- Elf Sawarna-Pelabuhan Ratu, ojek juga ada
+- Rangkasbitung bisa diakses dari Jakarta via KRL
 
-## WISATA SEKITAR SAWARNA
-- Pantai Ciantir: pantai utama, pasir putih luas, ombak besar, favorit peselancar, sunset bagus, persis depan villa
-- Pantai Pasir Putih: pasir halus, air jernih, cocok berenang keluarga, bisa surfing
-- Tanjung Layar: tebing karang ikonik sekitar 20 meter, bentuk seperti layar kapal, spot foto instagramable
-- Legon Pari: pantai tersembunyi, air sebening kristal, cocok snorkeling
-- Goa Langir: goa alami dengan stalaktit dan stalagmit, cocok eksplorasi
-- Karang Bokor: formasi karang unik, kolam alami, spot sunrise terbaik (di sebelah barat desa)
-- Pantai Pulo Manuk: pantai dengan pulau kecil
-- Pantai Karang Taraje: bagian dari Legon Pari, pemandangan asri
-- Tiket masuk pantai: sekitar Rp5.000 - Rp15.000 per orang
-- Parkir motor: Rp5.000 - Rp10.000, parkir mobil: Rp20.000 - Rp25.000
-- Aktivitas: surfing (ombak terbaik Mei-Oktober), snorkeling, diving, berenang, island hopping
-- Surfing: ombak konsisten Januari-Maret dan Mei-Oktober
+# WISATA SEKITAR
+- Pantai Ciantir (depan villa, sunset bagus, favorit peselancar)
+- Pantai Pasir Putih (air jernih, cocok berenang keluarga)
+- Tanjung Layar (tebing ikonik, spot foto)
+- Legon Pari (air bening, snorkeling)
+- Goa Langir (goa alami)
+- Karang Bokor (formasi karang, sunrise)
+- Pantai Pulo Manuk, Pantai Karang Taraje
+- Tiket masuk pantai: Rp5.000-15.000
+- Surfing terbaik: Mei-Oktober
 
-## KULINER LOKAL
-- Banyak warung makan dan restoran seafood lokal di sekitar Sawarna
-- Menu khas: ikan bakar, seafood segar, nasi uduk, sate, dan masakan Sunda
-- Kalau user minta rekomendasi spesifik, arahkan ke WhatsApp 0838-3025-8014 (biar tim villa yang kasih rekomendasi)
-- Tamu boleh bawa makanan dari luar
-- Dapur umum villa bisa dipakai untuk masak sendiri
+# KULINER
+- Banyak warung seafood & masakan Sunda di Sawarna
+- Menu khas: ikan bakar, seafood segar, nasi uduk, sate
+- Tamu boleh bawa makanan luar atau masak di dapur umum
+- Kalau user minta rekomendasi spesifik: arahkan ke WA 0838-3025-8014
 
-## CUACA & MUSIM
-- Iklim tropis: musim hujan November-Maret, musim kemarau April-Oktober
-- Musim terbaik berkunjung: Mei-September (cuaca cerah, ombak stabil, air jernih)
-- Suhu: 24-30°C sepanjang tahun
-- Waktu terbaik ke pantai: 07.00-13.00
-
-## ATURAN KHUSUS HARGA & KETERSEDIAAN
-- HARGA dan KETERSEDIAAN kamar: arahkan ke WhatsApp 0838-3025-8014
-- Jangan ngarang angka harga, promo, atau diskon
-- Jangan ngarang fasilitas yang tidak ada di data villa
-
-## WAKTU
+# WAKTU
 Hari ini: ${tanggal}
-Sekarang: ${jam} WIB
-
-Ingat: kamu Razki.Ai. Ngobrol natural, jawab apa yang ditanya, jangan ulang-ulang, jangan kaku, jangan bawa-bawa jawaban sebelumnya.`;
+Sekarang: ${jam} WIB`;
 }
 
 function first(v) {
@@ -172,46 +212,29 @@ function dataUrl(file) {
 
 async function transcribe(file) {
   const key = process.env.OPENAI_API_KEY;
-
   if (!key) return '';
 
   try {
     const form = new FormData();
-
     form.append(
       'file',
-      new Blob(
-        [fileBuffer(file)],
-        { type: file.mimetype || 'audio/webm' }
-      ),
+      new Blob([fileBuffer(file)], { type: file.mimetype || 'audio/webm' }),
       file.originalFilename || 'voice.webm'
     );
-
-    form.append(
-      'model',
-      process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe'
-    );
-
+    form.append('model', process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe');
     form.append('language', 'id');
 
-    const r = await fetch(
-      'https://api.openai.com/v1/audio/transcriptions',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${key}`
-        },
-        body: form
-      }
-    );
+    const r = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}` },
+      body: form
+    });
 
     const d = await r.json().catch(() => ({}));
-
     if (!r.ok) {
       console.error('OpenAI transcription error:', d);
       return '';
     }
-
     return d.text || '';
   } catch (err) {
     console.error('Transcription fallback:', err);
@@ -224,142 +247,59 @@ async function extractFile(file) {
   const type = file.mimetype || '';
   const size = file.size || 0;
 
-  if (
-    type.startsWith('text/') ||
-    /\.(txt|md|csv|json|log)$/i.test(name)
-  ) {
+  if (type.startsWith('text/') || /\.(txt|md|csv|json|log)$/i.test(name)) {
     const text = fileBuffer(file).toString('utf8');
-
-    return {
-      name,
-      type,
-      size,
-      text: text.slice(0, 30000)
-    };
+    return { name, type, size, text: text.slice(0, 30000) };
   }
 
-  if (
-    type === 'application/pdf' ||
-    /\.pdf$/i.test(name)
-  ) {
+  if (type === 'application/pdf' || /\.pdf$/i.test(name)) {
     try {
       const pdfParse = require('pdf-parse');
       const out = await pdfParse(fileBuffer(file));
-
-      return {
-        name,
-        type,
-        size,
-        text: (out.text || '').slice(0, 30000),
-        pages: out.numpages
-      };
+      return { name, type, size, text: (out.text || '').slice(0, 30000), pages: out.numpages };
     } catch (e) {
-      return {
-        name,
-        type,
-        size,
-        error: 'PDF tidak berhasil diekstrak: ' + e.message
-      };
+      return { name, type, size, error: 'PDF tidak berhasil diekstrak: ' + e.message };
     }
   }
 
-  if (
-    type ===
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-    /\.docx$/i.test(name)
-  ) {
+  if (type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || /\.docx$/i.test(name)) {
     try {
       const mammoth = require('mammoth');
-      const out = await mammoth.extractRawText({
-        buffer: fileBuffer(file)
-      });
-
-      return {
-        name,
-        type,
-        size,
-        text: (out.value || '').slice(0, 30000)
-      };
+      const out = await mammoth.extractRawText({ buffer: fileBuffer(file) });
+      return { name, type, size, text: (out.value || '').slice(0, 30000) };
     } catch (e) {
-      return {
-        name,
-        type,
-        size,
-        error: 'DOCX tidak berhasil diekstrak: ' + e.message
-      };
+      return { name, type, size, error: 'DOCX tidak berhasil diekstrak: ' + e.message };
     }
   }
 
-  if (
-    /\.(xlsx|xls)$/i.test(name) ||
-    /spreadsheet|excel/i.test(type)
-  ) {
+  if (/\.(xlsx|xls)$/i.test(name) || /spreadsheet|excel/i.test(type)) {
     try {
       const XLSX = require('xlsx');
-
-      const wb = XLSX.read(
-        fileBuffer(file),
-        { type: 'buffer' }
-      );
-
+      const wb = XLSX.read(fileBuffer(file), { type: 'buffer' });
       const parts = [];
-
       for (const sheet of wb.SheetNames.slice(0, 10)) {
-        const csv = XLSX.utils.sheet_to_csv(
-          wb.Sheets[sheet]
-        );
-
-        parts.push(
-          `SHEET: ${sheet}\n${csv.slice(0, 12000)}`
-        );
+        const csv = XLSX.utils.sheet_to_csv(wb.Sheets[sheet]);
+        parts.push(`SHEET: ${sheet}\n${csv.slice(0, 12000)}`);
       }
-
-      return {
-        name,
-        type,
-        size,
-        text: parts.join('\n\n').slice(0, 30000),
-        sheets: wb.SheetNames
-      };
+      return { name, type, size, text: parts.join('\n\n').slice(0, 30000), sheets: wb.SheetNames };
     } catch (e) {
-      return {
-        name,
-        type,
-        size,
-        error:
-          'Spreadsheet tidak berhasil dibaca: ' +
-          e.message
-      };
+      return { name, type, size, error: 'Spreadsheet tidak berhasil dibaca: ' + e.message };
     }
   }
 
-  return {
-    name,
-    type,
-    size,
-    unsupported: true
-  };
+  return { name, type, size, unsupported: true };
 }
 
-async function callChat({
-  message,
-  history,
-  files
-}) {
+async function callChat({ message, history, files }) {
   const key = process.env.OPENROUTER_API_KEY;
-
   if (!key) {
-    throw new Error(
-      'OPENROUTER_API_KEY belum diatur di environment server.'
-    );
+    throw new Error('OPENROUTER_API_KEY belum diatur di environment server.');
   }
 
   let finalMessage = message || '';
-
   const content = [];
   const notes = [];
   let transcript = '';
-
   const extracted = [];
 
   for (const file of files) {
@@ -368,374 +308,164 @@ async function callChat({
 
     if (type.startsWith('audio/')) {
       transcript = await transcribe(file);
-
       if (transcript) {
-        finalMessage = finalMessage
-          ? `${finalMessage}\n\n[Transkrip voice]\n${transcript}`
-          : transcript;
-
-        notes.push(
-          `Voice note ${name} berhasil ditranskrip.`
-        );
+        finalMessage = finalMessage ? `${finalMessage}\n\n[Transkrip voice]\n${transcript}` : transcript;
+        notes.push(`Voice note ${name} berhasil ditranskrip.`);
       } else {
-        notes.push(
-          `Voice note ${name} diterima. Transkripsi server tidak aktif pada mode gratis.`
-        );
+        notes.push(`Voice note ${name} diterima. Transkripsi server tidak aktif.`);
       }
-
       continue;
     }
 
     if (type.startsWith('image/')) {
       if ((file.size || 0) <= 7 * 1024 * 1024) {
-        content.push({
-          type: 'image_url',
-          image_url: {
-            url: dataUrl(file)
-          }
-        });
-
-        notes.push(
-          `Gambar ${name} dapat dianalisis.`
-        );
+        content.push({ type: 'image_url', image_url: { url: dataUrl(file) } });
+        notes.push(`Gambar ${name} dapat dianalisis.`);
       } else {
-        notes.push(
-          `Gambar ${name} terlalu besar untuk vision.`
-        );
+        notes.push(`Gambar ${name} terlalu besar untuk vision.`);
       }
-
       continue;
     }
 
     const x = await extractFile(file);
-
     extracted.push(x);
-
-    if (x.text) {
-      notes.push(
-        `Isi ${name}:\n${x.text}`
-      );
-    } else if (x.unsupported) {
-      notes.push(
-        `File ${name} (${type}) belum didukung untuk ekstraksi isi.`
-      );
-    } else if (x.error) {
-      notes.push(x.error);
-    }
+    if (x.text) notes.push(`Isi ${name}:\n${x.text}`);
+    else if (x.unsupported) notes.push(`File ${name} (${type}) belum didukung.`);
+    else if (x.error) notes.push(x.error);
   }
 
   if (finalMessage) {
-    content.unshift({
-      type: 'text',
-      text: finalMessage
-    });
+    content.unshift({ type: 'text', text: finalMessage });
   }
 
   if (notes.length) {
-    content.push({
-      type: 'text',
-      text: '[Lampiran]\n' + notes.join('\n\n')
-    });
+    content.push({ type: 'text', text: '[Lampiran]\n' + notes.join('\n\n') });
   }
 
   if (!content.length) {
-    content.push({
-      type: 'text',
-      text: 'Tolong bantu.'
-    });
+    content.push({ type: 'text', text: 'Tolong bantu.' });
   }
 
-  // Batasi history agar AI tidak kebanjiran konteks lama
-  const safeHistory = (
-    Array.isArray(history)
-      ? history
-      : []
-  )
-    .filter(
-      x =>
-        x &&
-        (x.role === 'user' ||
-          x.role === 'assistant')
-    )
-    .slice(-8)
+  // History dipotong cuma 6 pesan terakhir
+  const safeHistory = (Array.isArray(history) ? history : [])
+    .filter(x => x && (x.role === 'user' || x.role === 'assistant'))
+    .slice(-6)
     .map(x => ({
       role: x.role,
-      content: String(
-        x.content || ''
-      ).slice(0, 6000)
+      content: String(x.content || '').slice(0, 2000)
     }));
 
-  const r = await fetch(
-    'https://openrouter.ai/api/v1/chat/completions',
-    {
-      method: 'POST',
-
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${key}`,
-        'HTTP-Referer':
-          process.env.APP_URL ||
-          'http://localhost',
-        'X-Title': 'Razki.AI'
-      },
-
-      body: JSON.stringify({
-        model:
-          process.env.OPENROUTER_MODEL ||
-          'openai/gpt-4.1-mini',
-
-        messages: [
-          {
-            role: 'system',
-            content: getSystemPrompt()
-          },
-
-          ...safeHistory,
-
-          {
-            role: 'user',
-            content
-          }
-        ],
-
-        // Temperature tinggi dikit biar natural, gak kaku
-        temperature: 0.75,
-
-        // Variasi jawaban bagus, gak monoton
-        top_p: 0.9,
-
-        // Anti ngulang-ngulang kata/frasa
-        frequency_penalty: 0.5,
-        presence_penalty: 0.4,
-
-        max_tokens: Number(
-          process.env.OPENROUTER_MAX_TOKENS ||
-          1200
-        )
-      })
-    }
-  );
+  const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${key}`,
+      'HTTP-Referer': process.env.APP_URL || 'http://localhost',
+      'X-Title': 'Razki.AI'
+    },
+    body: JSON.stringify({
+      model: process.env.OPENROUTER_MODEL || 'openai/gpt-4.1-mini',
+      messages: [
+        { role: 'system', content: getSystemPrompt() },
+        ...safeHistory,
+        { role: 'user', content }
+      ],
+      temperature: 0.4,
+      top_p: 0.85,
+      frequency_penalty: 0.7,
+      presence_penalty: 0.6,
+      max_tokens: 500
+    })
+  });
 
   const d = await r.json().catch(() => ({}));
-
   if (!r.ok) {
-    throw new Error(
-      d.error?.message ||
-        'OpenRouter gagal.'
-    );
+    throw new Error(d.error?.message || 'OpenRouter gagal.');
   }
 
   return {
-    reply:
-      d.choices?.[0]?.message?.content ||
-      'AI tidak memberi jawaban.',
-
+    reply: d.choices?.[0]?.message?.content || 'AI tidak memberi jawaban.',
     transcript,
-
-    extracted:
-      extracted.map(x => ({
-        name: x.name,
-        type: x.type,
-        size: x.size,
-        pages: x.pages,
-        sheets: x.sheets,
-        error: x.error,
-        chars: x.text?.length || 0
-      }))
+    extracted: extracted.map(x => ({
+      name: x.name,
+      type: x.type,
+      size: x.size,
+      pages: x.pages,
+      sheets: x.sheets,
+      error: x.error,
+      chars: x.text?.length || 0
+    }))
   };
 }
 
 async function imageEdit(file, prompt) {
   const key = process.env.OPENAI_API_KEY;
-
-  if (!key) {
-    throw new Error(
-      'AI edit gambar membutuhkan OPENAI_API_KEY.'
-    );
-  }
+  if (!key) throw new Error('AI edit gambar membutuhkan OPENAI_API_KEY.');
 
   const form = new FormData();
+  form.append('model', 'gpt-image-1');
+  form.append('prompt', prompt || 'Edit gambar ini sesuai instruksi.');
+  form.append('image', new Blob([fileBuffer(file)], { type: file.mimetype || 'image/png' }), file.originalFilename || 'image.png');
+  form.append('size', 'auto');
 
-  form.append(
-    'model',
-    'gpt-image-1'
-  );
-
-  form.append(
-    'prompt',
-    prompt ||
-      'Edit gambar ini sesuai instruksi, pertahankan elemen yang tidak diminta untuk diubah.'
-  );
-
-  form.append(
-    'image',
-    new Blob(
-      [
-        fileBuffer(file)
-      ],
-      {
-        type:
-          file.mimetype ||
-          'image/png'
-      }
-    ),
-    file.originalFilename ||
-      'image.png'
-  );
-
-  form.append(
-    'size',
-    'auto'
-  );
-
-  const r = await fetch(
-    'https://api.openai.com/v1/images/edits',
-    {
-      method: 'POST',
-
-      headers: {
-        Authorization: `Bearer ${key}`
-      },
-
-      body: form
-    }
-  );
+  const r = await fetch('https://api.openai.com/v1/images/edits', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}` },
+    body: form
+  });
 
   const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error?.message || 'AI image edit gagal.');
 
-  if (!r.ok) {
-    throw new Error(
-      d.error?.message ||
-        'AI image edit gagal.'
-    );
-  }
+  const b64 = d.data?.[0]?.b64_json;
+  if (!b64) throw new Error('AI tidak mengembalikan gambar hasil edit.');
 
-  const b64 =
-    d.data?.[0]?.b64_json;
-
-  if (!b64) {
-    throw new Error(
-      'AI tidak mengembalikan gambar hasil edit.'
-    );
-  }
-
-  return {
-    dataUrl:
-      `data:image/png;base64,${b64}`
-  };
+  return { dataUrl: `data:image/png;base64,${b64}` };
 }
 
-module.exports = async function handler(
-  req,
-  res
-) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res
-      .status(405)
-      .json({
-        error: 'Method not allowed'
-      });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     let fields = {};
     let files = {};
+    const ct = String(req.headers['content-type'] || '');
 
-    const ct = String(
-      req.headers['content-type'] || ''
-    );
-
-    if (
-      ct.includes(
-        'multipart/form-data'
-      )
-    ) {
-      ({
-        fields,
-        files
-      } = await parseForm(req));
+    if (ct.includes('multipart/form-data')) {
+      ({ fields, files } = await parseForm(req));
     } else {
       fields = req.body || {};
     }
 
-    const action = field(
-      fields,
-      'action',
-      'chat'
-    );
-
-    const uploaded =
-      filesArray(files);
+    const action = field(fields, 'action', 'chat');
+    const uploaded = filesArray(files);
 
     if (action === 'image-edit') {
-      const image =
-        uploaded.find(f =>
-          (f.mimetype || '')
-            .startsWith('image/')
-        );
-
+      const image = uploaded.find(f => (f.mimetype || '').startsWith('image/'));
       if (!image) {
-        return res
-          .status(400)
-          .json({
-            error:
-              'Gambar untuk diedit belum dikirim.'
-          });
+        return res.status(400).json({ error: 'Gambar untuk diedit belum dikirim.' });
       }
-
-      const result =
-        await imageEdit(
-          image,
-          field(
-            fields,
-            'prompt',
-            'Edit gambar ini sesuai instruksi.'
-          )
-        );
-
-      return res
-        .status(200)
-        .json(result);
+      const result = await imageEdit(image, field(fields, 'prompt', 'Edit gambar ini sesuai instruksi.'));
+      return res.status(200).json(result);
     }
 
     let history = [];
-
     try {
-      history = JSON.parse(
-        field(
-          fields,
-          'history',
-          '[]'
-        )
-      );
+      history = JSON.parse(field(fields, 'history', '[]'));
     } catch {}
 
-    const result =
-      await callChat({
-        message: field(
-          fields,
-          'message',
-          ''
-        ).trim(),
+    const result = await callChat({
+      message: field(fields, 'message', '').trim(),
+      history,
+      files: uploaded
+    });
 
-        history,
-
-        files: uploaded
-      });
-
-    return res
-      .status(200)
-      .json(result);
+    return res.status(200).json(result);
 
   } catch (e) {
     console.error(e);
-
-    return res
-      .status(500)
-      .json({
-        error:
-          e.message ||
-          'Server error'
-      });
+    return res.status(500).json({ error: e.message || 'Server error' });
   }
 };
