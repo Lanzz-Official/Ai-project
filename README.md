@@ -1,4 +1,4 @@
-# LanzzAi HP Ready — Vercel
+# Razki.Ai Ready - Vercel
 
 Upload these files to the GitHub repo. Vercel supports Flask/Python serverless deployment.
 
